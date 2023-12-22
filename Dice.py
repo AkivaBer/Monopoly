@@ -8,6 +8,7 @@ class Die(object):
         return random.randint(1, self.sides)
 
     def num_sides(self):
+        print("Num sides")
         return self.sides
 
     def __str__(self):
