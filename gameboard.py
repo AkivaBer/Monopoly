@@ -1,6 +1,6 @@
 import tkinter as tk
+from PIL import Image as PILImage, ImageTk
 from Monopoly.piece import *
-from Monopoly.Dice import *
 
 class Gameboard:
     def __init__(self, height, num_pieces_on_go=1):
@@ -12,7 +12,6 @@ class Gameboard:
 
         self.root = tk.Tk()
         self.root.title("Monopoly Board Simulation")
-
         self.root.minsize(width=height, height=height + 25)
 
         board_frame = tk.Frame(self.root)
@@ -23,14 +22,16 @@ class Gameboard:
         self.draw_grid()
 
         self.root.bind("<Configure>", self.resize)
-        # Create and initialize pieces on the "Go" square
+
         for x in range(num_pieces_on_go):
             piece = Piece(self.canvas, self.space_size)
             self.pieces.append(piece)
 
+        # Create a frame for the button
         button_frame = tk.Frame(self.root)
         button_frame.pack(side="bottom", fill="x")
 
+        # Create the button within the button frame
         button = tk.Button(button_frame, text="Roll Dice", command=self.move_selected_piece)
         button.pack(side="bottom", fill="x")
 
@@ -47,33 +48,18 @@ class Gameboard:
             piece.resize(self.space_size)
             piece.draw_piece()
 
+    from PIL import Image, ImageTk
+
+    # ... rest of your code ...
+
     def draw_grid(self):
         self.canvas.delete("all")
 
-        # Draw top vertical lines
-        self.canvas.create_line(self.space_size, 0, self.space_size, self.height)
-        for i in range(2, 11):
-            self.canvas.create_line(i * self.space_size, 0, i * self.space_size, self.height // 11)
-
-        # Left Horizontal Lines
-        self.canvas.create_line(0, self.space_size, self.height, self.space_size, fill="black")
-        for i in range(1, 11):
-            self.canvas.create_line(0, i * self.space_size, self.height // 11, i * self.space_size, fill="black")
-
-        # Draw bottom vertical lines
-        for i in range(1, 10):
-            self.canvas.create_line(i * self.space_size, 10 * self.space_size, i * self.space_size,
-                                    self.height, fill="black")
-        self.canvas.create_line(10 * self.space_size, 0, 10 * self.space_size, self.height, fill="black")
-
-        # Right horizontal lines
-        for i in range(1, 10):
-            self.canvas.create_line(10 * self.space_size, i * self.space_size, self.height,
-                                    i * self.space_size, fill="black")
-        self.canvas.create_line(0, 10 * self.space_size, self.height, 10 * self.space_size, fill="black")
-
-        self.canvas.create_line(self.height, 0, self.height, self.height)
-        self.canvas.create_line(0, self.height, self.height, self.height)
+        # Load the image using Pillow
+        pil_image = PILImage.open(r"C:\Users\akiva\PycharmProjects\MonopolyAI\Monopoly\monopoly_500.jpg")
+        board_image = ImageTk.PhotoImage(pil_image)
+        self.canvas.image = board_image
+        self.canvas.create_image(0, 0, anchor="nw", image=board_image)
 
     def move_selected_piece(self):
         # Move the currently selected piece (first piece in the list)
