@@ -41,12 +41,12 @@ class Piece:
             y = (self.space_size / 2 - self.piece_radius)
         # Right column
         elif row == 1:
-            x = self.canvas.winfo_width() - (self.space_size / 2 + self.piece_radius)
+            x = (11 * self.space_size) - (self.space_size / 2 + self.piece_radius)
             y = col * self.space_size + self.piece_radius
         # Bottom Row
         elif row == 2:
             x = (10 - col) * self.space_size + self.piece_radius
-            y = self.canvas.winfo_height() - (self.space_size / 2 + self.piece_radius)
+            y = (11 * self.space_size) - (self.space_size / 2 + self.piece_radius)
         # Left column
         else:
             x = self.piece_radius

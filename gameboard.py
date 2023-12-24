@@ -6,7 +6,7 @@ class Gameboard:
     def __init__(self, height, num_pieces_on_go=1):
         self.height = height
         self.space_size = height // 11
-        self.corner_size = self.space_size
+        self.corner_size = self.space_size + 10
         self.pieces = []
         self.cur_piece = 0
 
