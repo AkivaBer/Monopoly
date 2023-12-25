@@ -2,11 +2,20 @@ import tkinter as tk
 from PIL import Image as PILImage, ImageTk
 from Monopoly.piece import *
 
+monopoly_board = [
+    "Free Parking", "Kentucky Avenue", "Chance", "Indiana Avenue", "Illinois Avenue",
+    "B. & O. Railroad", "Atlantic Avenue", "Ventnor Avenue", "Water Works", "Marvin Gardens",
+    "Go to Jail", "Pacific Avenue", "North Carolina Avenue", "Community Chest", "Pennsylvania Avenue",
+    "Short Line", "Chance", "Park Place", "Luxury Tax", "Boardwalk",
+    "Go", "Mediterranean Avenue", "Community Chest", "Baltic Avenue", "Income Tax",
+    "Reading Railroad", "Oriental Avenue", "Chance", "Vermont Avenue", "Connecticut Avenue",
+    "Jail / Just Visiting", "St. Charles Place", "Electric Company", "States Avenue", "Virginia Avenue",
+    "Pennsylvania Railroad", "St. James Place", "Community Chest", "Tennessee Avenue", "New York Avenue"
+]
 class Gameboard:
     def __init__(self, height, num_pieces_on_go=1):
         self.height = height
-        self.space_size = height // 11
-        self.corner_size = self.space_size + 10
+        self.space_size = height / 12.34
         self.pieces = []
         self.cur_piece = 0
 
@@ -19,15 +28,20 @@ class Gameboard:
 
         self.canvas = tk.Canvas(board_frame, bg='green')
         self.canvas.pack(fill="both", expand=True)
-        self.draw_grid()
-
-        self.root.bind("<Configure>", self.resize)
+        self.prev_size = min(self.canvas.winfo_width(), self.canvas.winfo_height())
 
         for x in range(num_pieces_on_go):
             piece = Piece(self.canvas, self.space_size)
             self.pieces.append(piece)
+            print(f"Piece {x} initial coordinates: {piece.get_piece_coordinates(0)}")
 
-        # Create a frame for the button
+        self.original_image = PILImage.open(r"C:\Users\akiva\PycharmProjects\MonopolyAI\Monopoly\monopoly.jpg")
+        self.draw_grid()
+
+        self.root.bind("<Configure>", self.resize)
+
+
+            # Create a frame for the button
         button_frame = tk.Frame(self.root)
         button_frame.pack(side="bottom", fill="x")
 
@@ -38,33 +52,38 @@ class Gameboard:
     def resize(self, event):
         canvas_width = self.canvas.winfo_width()
         canvas_height = self.canvas.winfo_height()
-        self.height = min(canvas_width, canvas_height)
-        self.space_size = self.height // 11
-        self.corner_size = self.space_size
+        size = min(canvas_width, canvas_height)
 
-        # Redraw the grid and pieces
-        self.draw_grid()
-        for piece in self.pieces:
-            piece.resize(self.space_size)
-            piece.draw_piece()
-
-    from PIL import Image, ImageTk
-
-    # ... rest of your code ...
+        if abs(self.prev_size - size) > 10:
+            self.prev_size = size
+            self.draw_grid()
+            for piece in self.pieces:
+                piece.update_position(size, (canvas_width - size) / 2)
 
     def draw_grid(self):
         self.canvas.delete("all")
 
-        # Load the image using Pillow
-        pil_image = PILImage.open(r"C:\Users\akiva\PycharmProjects\MonopolyAI\Monopoly\monopoly_500.jpg")
-        board_image = ImageTk.PhotoImage(pil_image)
-        self.canvas.image = board_image
-        self.canvas.create_image(0, 0, anchor="nw", image=board_image)
+        canvas_width = self.canvas.winfo_width()
+        canvas_height = self.canvas.winfo_height()
+
+        size = min(canvas_width, canvas_height)
+
+        resized_image = self.original_image.resize((size, size))
+        self.board_image = ImageTk.PhotoImage(resized_image)
+
+        # Calculate position to center the image
+        x = (canvas_width - size) // 2
+        y = (canvas_height - size) // 2
+
+        self.canvas.create_image(x, y, anchor="nw", image=self.board_image)
 
     def move_selected_piece(self):
         # Move the currently selected piece (first piece in the list)
         double = self.pieces[self.cur_piece].move_forward()
+        print(f"Position is {self.pieces[self.cur_piece].get_pos()} "
+              f"which means you landed on landed on {monopoly_board[self.pieces[self.cur_piece].get_pos()]}")
         self.cur_piece = (self.cur_piece + 1) % len(self.pieces) if not double else self.cur_piece
+
 
     def run(self):
         self.root.mainloop()

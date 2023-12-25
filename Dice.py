@@ -25,5 +25,4 @@ def roll_dice(sides=6):
     double = True if d1_roll == d2_roll else False
 
     total = d1_roll + d2_roll
-    print(f"Die Roll is: {total}, Double = {double}")
     return total, double

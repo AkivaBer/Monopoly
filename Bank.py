@@ -55,7 +55,6 @@ class Bank:
         self.hotels_left = 12
         self.properties = init_properties()
 
-    def sell_house(self, player):
 
 
 
