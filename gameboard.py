@@ -33,7 +33,7 @@ class Gameboard:
         for x in range(num_pieces_on_go):
             piece = Piece(self.canvas, self.space_size)
             self.pieces.append(piece)
-            print(f"Piece {x} initial coordinates: {piece.get_piece_coordinates(0)}")
+            print(f"Piece {x} initial coordinates: {piece.get_piece_coordinates()}")
 
         self.original_image = PILImage.open(r"C:\Users\akiva\PycharmProjects\MonopolyAI\Monopoly\monopoly.jpg")
         self.draw_grid()
@@ -58,7 +58,7 @@ class Gameboard:
             self.prev_size = size
             self.draw_grid()
             for piece in self.pieces:
-                piece.update_position(size, (canvas_width - size) / 2)
+                piece.update_position(size)
 
     def draw_grid(self):
         self.canvas.delete("all")
@@ -75,7 +75,7 @@ class Gameboard:
         x = (canvas_width - size) // 2
         y = (canvas_height - size) // 2
 
-        self.canvas.create_image(x, y, anchor="nw", image=self.board_image)
+        self.canvas.create_image(0, 0, anchor="nw", image=self.board_image)
 
     def move_selected_piece(self):
         # Move the currently selected piece (first piece in the list)

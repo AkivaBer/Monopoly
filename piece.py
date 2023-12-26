@@ -16,7 +16,7 @@ class Piece:
         self.draw_piece()
 
     def draw_piece(self, offset_x=0):
-        x, y = self.get_piece_coordinates(offset_x)  # Assuming initial offset is 0, 0
+        x, y = self.get_piece_coordinates()  # Assuming initial offset is 0, 0
         self.piece = self.canvas.create_oval(
             x, y,
             x + self.piece_radius * 2, y + self.piece_radius * 2,
@@ -24,11 +24,12 @@ class Piece:
         )
         self.canvas.update_idletasks()
 
-    def update_position(self, size, white_space):
+    def update_position(self, size):
         self.canvas.delete(self.piece)  # Clear the old piece
-        self.space_size = size // 12.34
+        self.space_size = size / 12.34
         self.piece_radius = self.space_size // 5
-        self.draw_piece(white_space)
+        self.corner_size = 1.67 * self.space_size
+        self.draw_piece()
 
     def move_forward(self):
         roll, double = roll_dice()
@@ -41,19 +42,19 @@ class Piece:
     def get_pos(self):
         return self.position
 
-    def get_piece_coordinates(self, offset_x):
+    def get_piece_coordinates(self):
         section = self.position // 10
         col = self.position % 10
 
         if section == 0:  # Top Row
             if col == 0:
-                x = offset_x + self.corner_size / 2
+                x = self.corner_size / 2
             else:
-                x = offset_x + self.corner_size + (col - 1) * self.space_size + (self.space_size * 1.5)
+                x = self.corner_size + (col - 1) * self.space_size + (self.space_size * 1.5)
             y = self.space_size / 2 - self.piece_radius
 
         elif section == 1:  # Right column
-            x = offset_x + (10 * self.space_size) + self.corner_size / 2
+            x = (10 * self.space_size) + self.corner_size / 2
             if section == 0:  # Corners
                 y = self.corner_size + 9 * self.space_size + (self.corner_size / 2)
             else:
@@ -61,13 +62,13 @@ class Piece:
 
         elif section == 2:  # Bottom Row
             if col == 0:
-                x = offset_x + self.corner_size + 9 * self.space_size + self.corner_size / 2
+                x = self.corner_size + 9 * self.space_size + self.corner_size / 2
             else:
-                x = offset_x + self.corner_size + (9 - col) * self.space_size + (self.space_size / 2.5)
+                x = self.corner_size + (9 - col) * self.space_size + (self.space_size / 2.5)
             y = self.corner_size + (9 * self.space_size) + self.corner_size / 2
 
         else:  # Left column
-            x = offset_x + self.space_size / 2 - self.piece_radius
+            x = self.space_size / 2 - self.piece_radius
             if section == 0:  # Corners
                 y = self.corner_size + (9 - col) * self.space_size + self.corner_size / 2
             else:  # Regular spaces
