@@ -32,22 +32,13 @@ def init_players():
         player_names.append(input(f"Name of player {i}: "))
     return player_names
 
-def property_popup(conv_prop):
-    buyWindow = tk.Toplevel()
-    label = tk.Label(buyWindow, text="You Landed on " + conv_prop.name)
-    label.pack(fill='x', padx=50, pady=5)
-    close = tk.Button(buyWindow, text="Close", command=buyWindow.destroy)
-    buy = tk.Button(buyWindow, text="Buy")
-
-    close.pack(side=tkinter.LEFT, expand=True)
-    buy.pack(side=tkinter.LEFT, expand=True)
-
 class Gameboard:
     def __init__(self, height):
         self.height = height
         self.space_size = height / 12.34
         self.cur_player = 0
-        self.bank = Bank()  # Correctly instantiate Bank
+        self.popup_open = False
+        self.bank = Bank()
         self.root = tk.Tk()
         self.root.title("Monopoly Board Simulation")
         self.root.minsize(width=height + 300, height=height)
@@ -123,13 +114,14 @@ class Gameboard:
         self.canvas.create_image(0, 0, anchor="nw", image=self.board_image)
 
     def move_selected_piece(self):
-        # Move the currently selected piece (first piece in the list)
-        double = self.players[self.cur_player].get_piece().move_forward()
-        cur_position = self.players[self.cur_player].get_piece().get_pos()
-        print(f"Position is {cur_position}")
-        property_popup(self.bank.look_up_property(cur_position))
+        if not self.popup_open:
+            # Move the currently selected piece (first piece in the list)
+            double = self.players[self.cur_player].get_piece().move_forward()
+            cur_position = self.players[self.cur_player].get_piece().get_pos()
+            print(f"Position is {cur_position}")
+            self.property_popup(self.bank.look_up_property(cur_position))
 
-        self.cur_player = (self.cur_player + 1) % len(self.players) if not double else self.cur_player
+            self.cur_player = (self.cur_player + 1) % len(self.players) if not double else self.cur_player
 
     def update_player_info(self, frame):
         for widget in frame.winfo_children():
@@ -145,6 +137,21 @@ class Gameboard:
 
             property_info = tk.Label(frame, text="Properties:")
             property_info.pack()
+
+    def property_popup(self, conv_prop):
+        self.popup_open = True
+        buyWindow = tk.Toplevel()
+        label = tk.Label(buyWindow, text="You Landed on " + conv_prop.name)
+        label.pack(fill='x', padx=50, pady=5)
+        close = tk.Button(buyWindow, text="Close", command=lambda: self.close_property(buyWindow))
+        buy = tk.Button(buyWindow, text="Buy")
+
+        close.pack(side=tkinter.LEFT, fill="x", expand=True)
+        buy.pack(side=tkinter.LEFT, fill="x", expand=True)
+
+    def close_property(self, popup):
+        self.popup_open = False
+        popup.destroy()
 
     def run(self):
         self.root.mainloop()
