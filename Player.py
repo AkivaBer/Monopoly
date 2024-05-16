@@ -33,7 +33,14 @@ class Player:
 
         return 0
 
+    def get_piece(self):
+        return self.piece
     def has_properties(self, prop_list):
         return set(prop_list) <= set(self.properties)
+
+    def trade(self):
+        pass
+    def player_info(self):
+        return {self.name: {"money": self.money, "properties": [self.properties]}}
 
 

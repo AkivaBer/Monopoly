@@ -1,11 +1,16 @@
 from re import match
 
 cards = []
+
+
 class Property:
     """
     price, build_cost, color, one_rent, two_rent, three_rent, four_rent, hotel_rent
     """
-    def __init__(self, price, build_cost, color, std_rent, one_rent, two_rent, three_rent, four_rent, hotel_rent, keystone):
+
+    def __init__(self, name, price, build_cost, color, std_rent, one_rent, two_rent, three_rent, four_rent, hotel_rent,
+                 keystone):
+        self.name = name
         self.price = price
         self.build_cost = build_cost
         self.color = color
@@ -35,15 +40,6 @@ class Property:
             return self.hotel_rent
         return 0
 
-    class Railroad:
-        def __init__(self):
-            # Railroads have a fixed purchase price and a base rent
-            self.base_rent = 50
-
-        def get_rent(self, player):
-            # Rent depends on the number of railroads owned
-            return 50 * player.get_total_railroads_owned()
-
     def get_owner(self):
         if self.owner == "":
             return "UNOWNED"
@@ -72,3 +68,31 @@ class Property:
 
         return self.build_cost * num_houses // 2
 
+
+class Speciality:
+    def __init__(self, name, type, bankOwed, amount):
+        self.name = name
+        self.type = type
+        self.bankOwed = bankOwed
+        self.earn = amount
+
+
+class ChanceComm:
+    def __init__(self, name, chance):
+        self.name = name
+        self.chance = chance
+
+
+class Railroad:
+    def __init__(self, name):
+        self.base_rent = 50
+        self.name = name
+
+    def get_rent(self, player):
+        # Rent depends on the number of railroads owned
+        return 50 * player.get_total_railroads_owned()
+
+
+class Utility:
+    def __init__(self, name):
+        self.name = name

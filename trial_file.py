@@ -1,35 +1,31 @@
 import tkinter as tk
+from tkinter.messagebox import showinfo
 
-def main():
-    root = tk.Tk()
-    w = tk.Label(root, text="Hello, world!")
-    w.pack(side="left")
-    root.mainloop()
-def create_board(self):
-    # Draw top vertical lines
-    self.canvas.create_line(self.space_size, 0, self.space_size, self.height)
-    for i in range(2, 11):
-        self.canvas.create_line(i * self.space_size, 0, i * self.space_size, self.height // 11)
+# --- functions ---
 
-    # Left Horizontal Lines
-    self.canvas.create_line(0, self.space_size, self.height, self.space_size, fill="black")
-    for i in range(1, 11):
-        self.canvas.create_line(0, i * self.space_size, self.height // 11, i * self.space_size, fill="black")
+def popup_window():
+    window = tk.Toplevel()
 
-    # Draw bottom vertical lines
-    for i in range(1, 10):
-        self.canvas.create_line(i * self.space_size, 10 * self.space_size, i * self.space_size,
-                                self.height, fill="black")
-    self.canvas.create_line(10 * self.space_size, 0, 10 * self.space_size, self.height, fill="black")
+    label = tk.Label(window, text="Hello World!")
+    label.pack(fill='x', padx=50, pady=5)
 
-    # Right horizontal lines
-    for i in range(1, 10):
-        self.canvas.create_line(10 * self.space_size, i * self.space_size, self.height,
-                                i * self.space_size, fill="black")
-    self.canvas.create_line(0, 10 * self.space_size, self.height, 10 * self.space_size, fill="black")
+    button_close = tk.Button(window, text="Close", command=window.destroy)
+    button_close.pack(fill='x')
 
-    self.canvas.create_line(self.height, 0, self.height, self.height)
-    self.canvas.create_line(0, self.height, self.height, self.height)
+def popup_showinfo():
+    showinfo("ShowInfo", "Hello World!")
 
-if __name__=="__main__":
-    main()
+# --- main ---
+
+root = tk.Tk()
+
+button_bonus = tk.Button(root, text="Window", command=popup_window)
+button_bonus.pack(fill='x')
+
+button_showinfo = tk.Button(root, text="ShowInfo", command=popup_showinfo)
+button_showinfo.pack(fill='x')
+
+button_close = tk.Button(root, text="Close", command=root.destroy)
+button_close.pack(fill='x')
+
+root.mainloop()
