@@ -23,15 +23,13 @@ class Player:
             self.railroads_owned.extend(railroad_list)
             self.util_owned.extend(util_list)
 
-    def edit_bank(self, remove, amount):
-        if remove and amount >= self.money:
-            self.money -= amount
-            return self.money
-        elif not remove:
-            self.money += amount
-            return self.money
+    def deposit(self, amount):
+        self.money += amount
+        return self.money
 
-        return 0
+    def withdraw(self, amount):
+        self.money -= amount
+        return self.money
 
     def get_piece(self):
         return self.piece

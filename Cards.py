@@ -8,9 +8,11 @@ class Property:
     price, build_cost, color, one_rent, two_rent, three_rent, four_rent, hotel_rent
     """
 
-    def __init__(self, name, price, build_cost, color, std_rent, one_rent, two_rent, three_rent, four_rent, hotel_rent,
+    def __init__(self, name, card_type, price, build_cost, color, std_rent, one_rent, two_rent, three_rent, four_rent,
+                 hotel_rent,
                  keystone):
         self.name = name
+        self.card_type = card_type
         self.price = price
         self.build_cost = build_cost
         self.color = color
@@ -70,23 +72,29 @@ class Property:
 
 
 class Speciality:
-    def __init__(self, name, type, bankOwed, amount):
+    def __init__(self, name, card_type, bankowed, amount):
         self.name = name
-        self.type = type
-        self.bankOwed = bankOwed
+        self.card_type = card_type
+        self.bankOwed = bankowed
         self.earn = amount
 
 
 class ChanceComm:
-    def __init__(self, name, chance):
+    def __init__(self, name, card_type, chance):
         self.name = name
         self.chance = chance
+        self.card_type = card_type
 
 
 class Railroad:
-    def __init__(self, name):
+    def __init__(self, name, card_type):
         self.base_rent = 50
         self.name = name
+        self.card_type = card_type
+        self.owner = ""
+
+    def set_owner(self, new_owner):
+        self.owner = new_owner
 
     def get_rent(self, player):
         # Rent depends on the number of railroads owned
@@ -94,5 +102,10 @@ class Railroad:
 
 
 class Utility:
-    def __init__(self, name):
+    def __init__(self, name, card_type):
         self.name = name
+        self.card_type = card_type
+        self.owner = ""
+
+    def set_owner(self, new_owner):
+        self.owner = new_owner

@@ -119,9 +119,41 @@ class Gameboard:
             double = self.players[self.cur_player].get_piece().move_forward()
             cur_position = self.players[self.cur_player].get_piece().get_pos()
             print(f"Position is {cur_position}")
-            self.property_popup(self.bank.look_up_property(cur_position))
 
+            self.execute_actions(cur_position)
+
+            # Move on to next player
             self.cur_player = (self.cur_player + 1) % len(self.players) if not double else self.cur_player
+
+    def execute_actions(self, cur_position):
+        cur_property = self.bank.look_up_property(cur_position)
+        match cur_property.card_type:
+            case CardType.PROPERTY:
+                self.property_popup(cur_property)
+            case CardType.CHANCE:
+                self.chance_utility_popup(cur_property)
+            case CardType.COMMUNITY_CHEST:
+                self.chance_utility_popup(cur_property)
+            case CardType.JAIL:
+                pass
+            case CardType.JUST_VISITING:
+                pass
+            case CardType.RAILROAD:
+                pass
+            case CardType.INCOME_TAX:
+                pass
+            case CardType.LUXURY_TAX:
+                pass
+            case CardType.FREE_PARKING:
+                pass
+            case CardType.ELECTRIC_COMPANY:
+                pass
+            case CardType.WATER_WORKS:
+                pass
+            case CardType.GO:
+                pass
+            case _:
+                pass
 
     def update_player_info(self, frame):
         for widget in frame.winfo_children():
@@ -141,13 +173,30 @@ class Gameboard:
     def property_popup(self, conv_prop):
         self.popup_open = True
         buyWindow = tk.Toplevel()
-        label = tk.Label(buyWindow, text="You Landed on " + conv_prop.name)
+        property_info = (
+            f"Property: {conv_prop.name}\n"
+            f"Price: ${conv_prop.price}\n"
+            f"Building Cost: ${conv_prop.build_cost}\n"
+            f"Rent (no houses): ${conv_prop.std_rent}\n"
+            f"Rent (1 house): ${conv_prop.one_rent}\n"
+            f"Rent (2 houses): ${conv_prop.two_rent}\n"
+            f"Rent (3 houses): ${conv_prop.three_rent}\n"
+            f"Rent (4 houses): ${conv_prop.four_rent}\n"
+            f"Rent (hotel): ${conv_prop.hotel_rent}"
+        )
+        label = tk.Label(buyWindow, text=property_info, justify=tk.LEFT)
         label.pack(fill='x', padx=50, pady=5)
         close = tk.Button(buyWindow, text="Close", command=lambda: self.close_property(buyWindow))
         buy = tk.Button(buyWindow, text="Buy")
 
-        close.pack(side=tkinter.LEFT, fill="x", expand=True)
-        buy.pack(side=tkinter.LEFT, fill="x", expand=True)
+        close.pack(side=tk.LEFT, fill="x", expand=True)
+        buy.pack(side=tk.LEFT, fill="x", expand=True)
+
+    def chance_utility_popup(self, conv_card):
+        self.popup_open = True
+        chance_comm_window = tk.Toplevel()
+        chance_info = f"You have opened a {conv_card.name}"
+        label = tk.Label(chance_comm_window, text=chance_info)
 
     def close_property(self, popup):
         self.popup_open = False
