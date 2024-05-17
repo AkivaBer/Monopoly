@@ -31,10 +31,10 @@ class Piece:
         self.corner_size = 1.67 * self.space_size
         self.draw_piece()
 
-    def move_forward(self):
+    def move_forward(self, force_move=-1):
         roll, double = roll_dice()
         print(f"{self.color} moving forward {roll} Double = {double}")
-        self.position = (self.position + roll) % 40
+        self.position = (self.position + roll) % 40 if force_move == -1 else force_move
         self.canvas.delete(self.piece)  # Clear the old piece
         self.draw_piece()
         return double
@@ -50,7 +50,7 @@ class Piece:
             if col == 0:
                 x = self.corner_size / 2
             else:
-                x = self.corner_size + (col - 1) * self.space_size + (self.space_size * 1.5)
+                x = self.corner_size + (col - 1) * self.space_size + (self.space_size / 2.5)
             y = self.space_size / 2 - self.piece_radius
 
         elif section == 1:  # Right column

@@ -75,9 +75,9 @@ class Gameboard:
         self.draw_grid()
 
         # Create player info section
-        player_frame = tk.Frame(main_frame)
-        self.update_player_info(player_frame)
-        player_frame.pack(side=tk.RIGHT, fill="both", expand=True)
+        self.player_frame = tk.Frame(main_frame)
+        self.update_player_info(self.player_frame)
+        self.player_frame.pack(side=tk.RIGHT, fill="both", expand=True)
 
         # Create a frame for all the buttons
         button_frame = tk.Frame(self.root)
@@ -126,6 +126,7 @@ class Gameboard:
             self.cur_player = (self.cur_player + 1) % len(self.players) if not double else self.cur_player
 
     def execute_actions(self, cur_position):
+        print("Excuting action")
         cur_property = self.bank.look_up_property(cur_position)
         match cur_property.card_type:
             case CardType.PROPERTY:
@@ -135,7 +136,7 @@ class Gameboard:
             case CardType.COMMUNITY_CHEST:
                 self.chance_utility_popup(cur_property)
             case CardType.JAIL:
-                pass
+                self.jail_popup(cur_property)
             case CardType.JUST_VISITING:
                 pass
             case CardType.RAILROAD:
@@ -167,7 +168,7 @@ class Gameboard:
             money = tk.Label(frame, text=f"Money: ${player.money}")
             money.pack()
 
-            property_info = tk.Label(frame, text="Properties:")
+            property_info = tk.Label(frame, text="Properties: " + str(player.properties))
             property_info.pack()
 
     def property_popup(self, conv_prop):
@@ -187,7 +188,7 @@ class Gameboard:
         label = tk.Label(buyWindow, text=property_info, justify=tk.LEFT)
         label.pack(fill='x', padx=50, pady=5)
         close = tk.Button(buyWindow, text="Close", command=lambda: self.close_property(buyWindow))
-        buy = tk.Button(buyWindow, text="Buy")
+        buy = tk.Button(buyWindow, text="Buy", command=lambda: self.purchase_property(buyWindow, conv_prop))
 
         close.pack(side=tk.LEFT, fill="x", expand=True)
         buy.pack(side=tk.LEFT, fill="x", expand=True)
@@ -197,10 +198,27 @@ class Gameboard:
         chance_comm_window = tk.Toplevel()
         chance_info = f"You have opened a {conv_card.name}"
         label = tk.Label(chance_comm_window, text=chance_info)
+        label.pack(fill='x', padx=50, pady=5)
+
+        close = tk.Button(chance_comm_window, text="Close", command=lambda: self.close_property(chance_comm_window))
+        close.pack(side=tk.LEFT, fill="x", expand=True)
+
+    def jail_popup(self, conv_card):
+        self.popup_open = True
 
     def close_property(self, popup):
         self.popup_open = False
         popup.destroy()
+
+    def purchase_property(self, window, cur_property):
+        if not is_owned(cur_property):
+            confirm = self.players[self.cur_player].buy_property(cur_property)
+            cur_property.set_owner(self.players[self.cur_player]) if confirm else print("Property can't be bought")
+
+        self.update_player_info(self.player_frame)
+        self.close_property(window)
+
+
 
     def run(self):
         self.root.mainloop()

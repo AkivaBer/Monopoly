@@ -128,6 +128,10 @@ def exchange_money(player1, player2, player1_give, player2_give):
     return 0
 
 
+def is_owned(cur_property):
+    return cur_property.owner != ""
+
+
 class Bank:
     def __init__(self):
         self.houses_left = 32
@@ -137,4 +141,5 @@ class Bank:
     def look_up_property(self, position):
         return self.properties.get(position)
 
-    def is_owned(self, property):
+
+
