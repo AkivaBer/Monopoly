@@ -52,10 +52,10 @@ def init_properties():
     Chance = ChanceComm("Chance", CardType.CHANCE, True)
     CommunityChest = ChanceComm("Community Chest", CardType.COMMUNITY_CHEST, True)
 
-    ReadingRail = Railroad("Reading Railroad", CardType.RAILROAD)
-    PennR = Railroad("Pennsylvania Railroad", CardType.RAILROAD)
-    BO = Railroad("B&O Railroad", CardType.RAILROAD)
-    ShortLineR = Railroad("Short Line Railroad", CardType.RAILROAD)
+    ReadingRail = Railroad("Reading Railroad", 200, CardType.RAILROAD)
+    PennR = Railroad("Pennsylvania Railroad", 200, CardType.RAILROAD)
+    BO = Railroad("B&O Railroad", 200, CardType.RAILROAD)
+    ShortLineR = Railroad("Short Line Railroad", 200, CardType.RAILROAD)
 
     Go = Speciality("Go", CardType.GO, False, 200)
     IncomeTax = Speciality("Income Tax", CardType.INCOME_TAX, True, 200)
@@ -66,8 +66,8 @@ def init_properties():
 
     Jail = Speciality("Jail", CardType.JAIL, False, 0)
 
-    ElectricCompany = Utility("Electric Company", CardType.ELECTRIC_COMPANY)
-    WaterWorks = Utility("Water Works", CardType.WATER_WORKS)
+    ElectricCompany = Utility("Electric Company", 150, CardType.ELECTRIC_COMPANY)
+    WaterWorks = Utility("Water Works", 150, CardType.WATER_WORKS)
 
     board_positions = {
         20: Go,

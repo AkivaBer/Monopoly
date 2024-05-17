@@ -87,9 +87,10 @@ class ChanceComm:
 
 
 class Railroad:
-    def __init__(self, name, card_type):
+    def __init__(self, name, price, card_type):
         self.base_rent = 50
         self.name = name
+        self.price = price
         self.card_type = card_type
         self.owner = ""
 
@@ -102,8 +103,9 @@ class Railroad:
 
 
 class Utility:
-    def __init__(self, name, card_type):
+    def __init__(self, name, price, card_type):
         self.name = name
+        self.price = price
         self.card_type = card_type
         self.owner = ""
 
